@@ -1,2 +1,2 @@
-hackassembler.exe -somearg
+hackassembler.exe "..\..\test_scripts\Add.asm"
 pause
