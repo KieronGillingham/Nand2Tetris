@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <fstream>
 #include <string>
 using namespace std;
 
@@ -31,13 +32,33 @@ int main(int argc, char *argv[]) {
 
     // Parse program arguments
     // Handle input file
-    string filepath = "file.asm"; // Default input filepath
+    string filepath = "./file.asm"; // Default input filepath
     // Get new filepath if given as argument
     if (argc > 1) {
         char* arg = argv[1];
         filepath = arg;
     }
     cout << "Assembling " << filepath << endl; // Output filepath to be used
+
+    
+    string fileLine;
+    ifstream inputFile(filepath);
+    
+    if (!inputFile.is_open()) {
+        // Input file not found
+        cout << "ERROR - Input file '" << filepath << "' could not be opened." << endl;
+        return 0;
+    } else {
+        cout << "File opened." << endl;
+    }
+    /*
+    
+    while (getline(inputFile, fileLine)) {
+        // Print file contents if found
+        cout << fileLine;
+    }
+    inputFile.close();
+    */
 
     // TODO - Transfer assembly operation from Java project
     cout << "ERROR - Assembly not implemented." << endl;
