@@ -49,16 +49,16 @@ int main(int argc, char *argv[]) {
         cout << "ERROR - Input file '" << filepath << "' could not be opened." << endl;
         return 0;
     } else {
-        cout << "File opened." << endl;
+        cout << "File opened." << endl << "File contents:" << endl;
+
+        while (getline(inputFile, fileLine)) {
+            // Print file contents
+            cout << "  " << fileLine << endl; 
+        }
+
+        // Close the file
+        inputFile.close();
     }
-    /*
-    
-    while (getline(inputFile, fileLine)) {
-        // Print file contents if found
-        cout << fileLine;
-    }
-    inputFile.close();
-    */
 
     // TODO - Transfer assembly operation from Java project
     cout << "ERROR - Assembly not implemented." << endl;
