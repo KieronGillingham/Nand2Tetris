@@ -40,28 +40,28 @@ int main(int argc, char *argv[]) {
     }
     cout << "Assembling " << filepath << endl; // Output filepath to be used
 
-    
-    string fileLine;
-    ifstream inputFile(filepath);
-    
-    if (!inputFile.is_open()) {
-        // Input file not found
-        cout << "ERROR - Input file '" << filepath << "' could not be opened." << endl;
-        return 0;
-    } else {
+    try {
+
+        string fileLine;
+        ifstream inputFile(filepath);
+        
+        // Check file was opened successfully
+        if (!inputFile.is_open()) {
+            // Input file not found
+            cout << "ERROR - Input file '" << filepath << "' could not be opened." << endl;
+            return 0;
+        }
+
+        // Output file contents
         cout << "File opened." << endl << "File contents:" << endl;
 
         while (getline(inputFile, fileLine)) {
             // Print file contents
             cout << "  " << fileLine << endl; 
         }
-
-        // Close the file
-        inputFile.close();
+    } catch (int e) {
+        cout << "Error: " << e << endl; 
     }
-
-    // TODO - Transfer assembly operation from Java project
-    cout << "ERROR - Assembly not implemented." << endl;
 
     // End program execution
     cout << "Stopping." << endl;
