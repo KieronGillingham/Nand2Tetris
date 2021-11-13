@@ -2,6 +2,9 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
+#include <cctype>
+#include <algorithm>
 using namespace std;
 
 /**
@@ -9,6 +12,21 @@ using namespace std;
  *    containing 16-bit machine code for the Hack computer.
  *  @author Kieron Gillingham <kierongillingham@gmail.com>
  */
+
+class HackAssembler {
+    public:
+        /**
+         *   Perform operation on an input string. 
+         *   @param input The string to be translated.
+         *   @returns A lowercase version of 'input' using 'std::tolower()'.
+         */
+        string translate(string input) {
+            // Transform the input string by calling tolower() on each char.
+            transform(input.begin(), input.end(), input.begin(), [](unsigned char c){ return tolower(c); });
+            return input;
+        }
+
+};
 
 int main(int argc, char *argv[]) {
     // Print details
@@ -40,11 +58,11 @@ int main(int argc, char *argv[]) {
     }
     cout << "Assembling " << filepath << endl; // Output filepath to be used
 
+    
     try {
-
-        string fileLine;
+        // Create ifstream to read file
         ifstream inputFile(filepath);
-        
+
         // Check file was opened successfully
         if (!inputFile.is_open()) {
             // Input file not found
@@ -52,13 +70,18 @@ int main(int argc, char *argv[]) {
             return 0;
         }
 
-        // Output file contents
-        cout << "File opened." << endl << "File contents:" << endl;
+        // File opened successfully
+        cout << "File opened." << endl;
 
+        // Create instance of HackAssembler to perform translation
+        HackAssembler assembler = HackAssembler();
+        string fileLine;
         while (getline(inputFile, fileLine)) {
-            // Print file contents
+            // Translate current line and output result to console
+            fileLine = assembler.translate(fileLine);
             cout << "  " << fileLine << endl; 
         }
+
     } catch (int e) {
         cout << "Error: " << e << endl; 
     }
