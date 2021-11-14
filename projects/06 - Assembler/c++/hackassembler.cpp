@@ -50,23 +50,24 @@ int main(int argc, char *argv[]) {
 
     // Parse program arguments
     // Handle input file
-    string filepath = "./file.asm"; // Default input filepath
+    string infilepath = "./file.asm"; // Default input filepath
     // Get new filepath if given as argument
     if (argc > 1) {
         char* arg = argv[1];
-        filepath = arg;
+        infilepath = arg;
     }
-    cout << "Assembling " << filepath << endl; // Output filepath to be used
+    string outputfilepath = "output.txt";
+    cout << "Assembling " << infilepath << " to " << outputfilepath << endl; // Output filepath to be used
 
-    
     try {
-        // Create ifstream to read file
-        ifstream inputFile(filepath);
+        // Create streams to read/write file
+        ifstream inputFile(infilepath);
+        
 
         // Check file was opened successfully
         if (!inputFile.is_open()) {
             // Input file not found
-            cout << "ERROR - Input file '" << filepath << "' could not be opened." << endl;
+            cout << "ERROR - Input file '" << infilepath << "' could not be opened." << endl;
             return 0;
         }
 
@@ -76,14 +77,22 @@ int main(int argc, char *argv[]) {
         // Create instance of HackAssembler to perform translation
         HackAssembler assembler = HackAssembler();
         string fileLine;
+        ofstream outFile;
+        outFile.open(outputfilepath);
+        if (!outFile) {
+            cout << "ERROR - Output file '" << outputfilepath << "' could not be created." << endl;
+            return 0;
+        }
         while (getline(inputFile, fileLine)) {
             // Translate current line and output result to console
             fileLine = assembler.translate(fileLine);
-            cout << "  " << fileLine << endl; 
+            outFile << fileLine << endl; 
         }
+        outFile.close();
+        cout << "Translation complete." << endl;
 
     } catch (int e) {
-        cout << "Error: " << e << endl; 
+        cout << "Error: " << e << endl;
     }
 
     // End program execution
