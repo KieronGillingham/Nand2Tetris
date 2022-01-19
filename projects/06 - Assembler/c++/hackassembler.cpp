@@ -5,6 +5,8 @@
 #include <cstring>
 #include <cctype>
 #include <algorithm>
+#include <exception>
+
 using namespace std;
 
 /**
@@ -30,7 +32,7 @@ class HackAssembler {
 
 int main(int argc, char *argv[]) {
     // Print details
-    cout << "--Hack Assembler--" << endl << "-Kieron Gillingham- -2021-" << endl;
+    cout << "--Hack Assembler--" << endl << "-Kieron Gillingham- -2022-" << endl;
 
     // Start program execution
     cout << "Starting." << endl;
@@ -63,12 +65,10 @@ int main(int argc, char *argv[]) {
         // Create streams to read/write file
         ifstream inputFile(infilepath);
         
-
         // Check file was opened successfully
         if (!inputFile.is_open()) {
             // Input file not found
-            cout << "ERROR - Input file '" << infilepath << "' could not be opened." << endl;
-            return 0;
+            throw runtime_error("ERROR - Input file '" + infilepath + "' could not be opened.");
         }
 
         // File opened successfully
@@ -80,8 +80,7 @@ int main(int argc, char *argv[]) {
         ofstream outFile;
         outFile.open(outputfilepath);
         if (!outFile) {
-            cout << "ERROR - Output file '" << outputfilepath << "' could not be created." << endl;
-            return 0;
+            throw runtime_error("ERROR - Output file '" + outputfilepath + "' could not be created.");
         }
         while (getline(inputFile, fileLine)) {
             // Translate current line and output result to console
@@ -91,8 +90,9 @@ int main(int argc, char *argv[]) {
         outFile.close();
         cout << "Translation complete." << endl;
 
-    } catch (int e) {
-        cout << "Error: " << e << endl;
+    } catch (exception& e) {
+        cerr << e.what() << endl;
+        return 1;
     }
 
     // End program execution
