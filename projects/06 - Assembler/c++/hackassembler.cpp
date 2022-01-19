@@ -30,24 +30,38 @@ class HackAssembler {
 
 };
 
+bool strcmpb(const char *_Str1, const char *_Str2) {
+    return strcmp(_Str1, _Str2) == 0;
+}
+
 int main(int argc, char *argv[]) {
     // Print details
     cout << "--Hack Assembler--" << endl << "-Kieron Gillingham- -2022-" << endl;
 
-    // Start program execution
-    cout << "Starting." << endl;
-
     // Handle program arguments
-    if (argc != 0) {
+    try {
+        if (argc >= 2) {
 
-        // List arguments for debugging
-        cout << argc << " arguments detected:" << endl;
-        for (int i = 0; i < argc; i++) {
-            cout << "  " << argv[i] << endl;
+            // List arguments for debugging
+            cout << argc << " arguments detected:" << endl;
+            for (int i = 0; i < argc; i++) {
+                cout << "  " << argv[i] << endl;
+            }
+
+            // Handle arguments
+            for (int i = 0; i < argc; i++) {
+                if (strcmpb(argv[i], "-h") || strcmpb(argv[i], "--help")) {
+                    cout << "Usage: hackassembler [-h | --help] input_file [-o output_file | --output output_file]" << endl;
+                    return 0;
+                }
+            }
+        } else {
+            throw runtime_error("ERROR - Missing arguments. See 'hackassembler -h' for usage instructions.");
         }
 
-    } else {
-        cout << "No arguments detected." << endl;
+    } catch (exception& e) {
+        cerr << e.what() << endl;
+        return 1;
     }
 
     // Parse program arguments
@@ -59,6 +73,10 @@ int main(int argc, char *argv[]) {
         infilepath = arg;
     }
     string outputfilepath = "output.txt";
+
+    // Start program execution
+    cout << "Starting." << endl;
+
     cout << "Assembling " << infilepath << " to " << outputfilepath << endl; // Output filepath to be used
 
     try {
