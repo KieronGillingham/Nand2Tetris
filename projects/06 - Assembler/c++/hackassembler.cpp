@@ -38,6 +38,10 @@ int main(int argc, char *argv[]) {
     // Print details
     cout << "--Hack Assembler--" << endl << "-Kieron Gillingham- -2022-" << endl;
 
+    // Set program arguments
+    string infilepath = "./file.asm"; // Default input filepath
+    string outputfilepath; // Output file
+
     // Handle program arguments
     try {
         if (argc >= 2) {
@@ -49,10 +53,32 @@ int main(int argc, char *argv[]) {
             }
 
             // Handle arguments
-            for (int i = 0; i < argc; i++) {
-                if (strcmpb(argv[i], "-h") || strcmpb(argv[i], "--help")) {
-                    cout << "Usage: hackassembler [-h | --help] input_file [-o output_file | --output output_file]" << endl;
-                    return 0;
+            for (int i = 1; i < argc; i++) { // For each argument
+                char* arg = argv[i];
+                if (arg[0] == '-') { // If arg begins with a dash it is a flag
+                    if (strcmpb(arg, "-h") || strcmpb(arg, "--help")) { // Help
+                        cout << "Usage: hackassembler [-h | --help] input_file [-o output_file | --output output_file]" << endl;
+                        return 0; 
+                    
+                    } else if (strcmpb(arg, "-o") || strcmpb(arg, "--output")) { // Output
+                        if (i + 1 < argc) {
+                            // argv[i+1] is the name of the output file
+                            char* arg = argv[i+1];
+                            outputfilepath = arg;
+                            i++; // Increment counter to skip parameter on next loop
+                        } else { // No parameter found
+                            throw runtime_error("ERROR - Output flag requires an output filename. See 'hackassembler -h' for usage instructions.");
+                        }
+                    } else {
+                        string str(arg);
+                        throw runtime_error("ERROR - Unknown flag '" + str + "'. See 'hackassembler -h' for usage instructions.");
+                    }
+
+                } else { // Handle positional arguments
+                    infilepath = arg;
+                    if (outputfilepath.empty()) {
+                        outputfilepath = infilepath + ".txt";
+                    }
                 }
             }
         } else {
@@ -63,16 +89,6 @@ int main(int argc, char *argv[]) {
         cerr << e.what() << endl;
         return 1;
     }
-
-    // Parse program arguments
-    // Handle input file
-    string infilepath = "./file.asm"; // Default input filepath
-    // Get new filepath if given as argument
-    if (argc > 1) {
-        char* arg = argv[1];
-        infilepath = arg;
-    }
-    string outputfilepath = "output.txt";
 
     // Start program execution
     cout << "Starting." << endl;
